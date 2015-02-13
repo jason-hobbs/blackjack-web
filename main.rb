@@ -6,3 +6,6 @@ set :sessions, true
 
 
 
+get '/' do
+  erb :hometemplate
+end
