@@ -1,0 +1,18 @@
+<h3>Hello <%= session['username'] %></h3>
+
+<!--<p><%= session['deck'] %></p>-->
+<p>Dealer's Cards:</p>
+<ul>
+  <% session[:dealer_cards].each do |card| %>
+    <li><%= card.to_s %></li>
+  <% end %>
+</ul>
+
+<br>
+
+<p>Player's Cards:</p>
+<ul>
+  <% session[:player_cards].each do |card| %>
+    <li><%= card.to_s %></li>
+  <% end %>
+</ul>
