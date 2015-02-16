@@ -17,6 +17,6 @@ end
 
 
 post '/getname' do
-  puts params['username']
   session['username'] = params['username']
+  redirect '/'
 end
