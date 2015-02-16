@@ -7,5 +7,10 @@ set :sessions, true
 
 
 get '/' do
-  erb :hometemplate
+  erb :form
+end
+
+
+post '/getname' do
+  puts params['username']
 end
