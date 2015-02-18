@@ -16,3 +16,7 @@
     <li><%= card.to_s %></li>
   <% end %>
 </ul>
+
+<p>
+  You have a total of <%= calculate_total(session[:player_cards]) %>
+</p>
