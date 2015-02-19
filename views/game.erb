@@ -7,6 +7,14 @@
       <img src='/images/cards/<%= card[0].downcase %>_<%= card[1].downcase %>.jpg' class='card'>
     <% end %>
   </ul>
+  <% if @show_dealer_hit_button %>
+    <p>
+      <h5>Dealer has <%= calculate_total(session[:dealer_cards]) %> and will hit.</h5>
+      <form action="/game/dealer/hit" method="post">
+        <input type='submit' class='btn btn-primary' value='Click to see dealer card &rarr;'>
+      </form>
+      <% end %>
+    </p>
 </div>
 <br>
 
