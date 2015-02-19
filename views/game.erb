@@ -1,12 +1,23 @@
 <h3>Hello <%= session['username'] %></h3>
 
+<% if @play_again %>
+  <p>
+      <strong>Play again?</strong>
+      <a href="/game" class="btn btn-primary">Yes</a>
+      <a href="/game_over" class="btn">No</a>
+  </p>
+<% end %>
+
 <div class='well'>
   <h4>Dealer's Cards:</h4>
-  <ul>
-    <% session[:dealer_cards].each do |card| %>
-      <img src='/images/cards/<%= card[0].downcase %>_<%= card[1].downcase %>.jpg' class='card'>
+    <% session[:dealer_cards].each_with_index do |card, i| %>
+      <% if session[:turn] != "dealer" && i == 0 %>
+      <img src='/images/cards/cover.jpg' class='card'>
+      <% else %>
+        <img src='/images/cards/<%= card[0].downcase %>_<%= card[1].downcase %>.jpg' class='card'>
+      <% end %>
     <% end %>
-  </ul>
+
   <% if @show_dealer_hit_button %>
     <p>
       <h5>Dealer has <%= calculate_total(session[:dealer_cards]) %> and will hit.</h5>
