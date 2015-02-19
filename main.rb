@@ -37,10 +37,14 @@ get '/' do
   end
 end
 
-
 post '/getname' do
-  session['username'] = params['username']
-  redirect '/'
+  if params['username'].empty?
+    @error = "Name is required"
+    halt erb(:form)
+  else
+    session['username'] = params['username']
+    redirect '/'
+  end
 end
 
 get '/game' do
@@ -62,15 +66,19 @@ end
 
 post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
-  if calculate_total(session[:player_cards]) > 21
-    @error = "You busted!"
+  player_total = calculate_total(session[:player_cards])
+  if player_total == 21
+    @success = "Congratulations! #{session[:username]} hit blackjack!"
+    @show_hit_or_stay_buttons = false
+  elsif player_total > 21
+    @error = "#{session[:username]} busted!"
     @show_hit_or_stay_buttons = false
   end
   erb :game
 end
 
 post '/game/player/stay' do
-  @success = "You have chosen to stay."
+  @success = "#{session[:username]} has chosen to stay."
   @show_hit_or_stay_buttons = false
   erb :game
 end

@@ -1,32 +1,33 @@
 <h3>Hello <%= session['username'] %></h3>
 
-<!--<p><%= session['deck'] %></p>-->
-<p>Dealer's Cards:</p>
-<ul>
-  <% session[:dealer_cards].each do |card| %>
-    <li><%= card.to_s %></li>
-  <% end %>
-</ul>
-
+<div class='well'>
+  <h4>Dealer's Cards:</h4>
+  <ul>
+    <% session[:dealer_cards].each do |card| %>
+      <img src='/images/cards/<%= card[0].downcase %>_<%= card[1].downcase %>.jpg' class='card'>
+    <% end %>
+  </ul>
+</div>
 <br>
 
-<p>Player's Cards:</p>
-<ul>
-  <% session[:player_cards].each do |card| %>
-    <li><%= card.to_s %></li>
-  <% end %>
-</ul>
-
+<div class='well'>
+  <h4>Player's Cards:</h4>
+  <ul>
+    <% session[:player_cards].each do |card| %>
+      <img src='/images/cards/<%= card[0].downcase %>_<%= card[1].downcase %>.jpg' class='card'>
+    <% end %>
+  </ul>
+</div>
 <p>
   You have a total of <%= calculate_total(session[:player_cards]) %>
 </p>
 
 
 <% if @show_hit_or_stay_buttons %>
-  <form action="/game/player/hit" method="post">
-    <input type='submit' class='btn' value='Hit!'>
+  <form id='hit_form' action="/game/player/hit" method="post">
+    <input type='submit' class='btn btn-success' value='Hit!'>
   </form>
-  <form action="/game/player/stay" method="post">
-    <input type='submit' class='btn' value='Stay'>
+  <form id='stay_form' action="/game/player/stay" method="post">
+    <input type='submit' class='btn btn-warning' value='Stay'>
   </form>
 <% end %>
