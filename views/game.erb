@@ -3,7 +3,7 @@
 <% if @play_again %>
   <p>
       <strong>Play again?</strong>
-      <a href="/game" class="btn btn-primary">Yes</a>
+      <a href="/bet" class="btn btn-primary">Yes</a>
       <a href="/game_over" class="btn">No</a>
   </p>
 <% end %>
@@ -36,10 +36,14 @@
       <img src='/images/cards/<%= card[0].downcase %>_<%= card[1].downcase %>.jpg' class='card'>
     <% end %>
   </ul>
+  <h5><%= session[:username ]%> has $<%= session[:pot] %> and bet $<%= session[:bet] %></h5>
 </div>
 <p>
-  You have a total of <%= calculate_total(session[:player_cards]) %>
+  <%= session[:username ]%> has a total of <%= calculate_total(session[:player_cards]) %>
 </p>
+
+
+
 
 
 <% if @show_hit_or_stay_buttons %>

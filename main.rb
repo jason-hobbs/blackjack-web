@@ -6,6 +6,7 @@ set :root, File.dirname(__FILE__)
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_HIT = 17
+INITIAL_POT_AMOUNT = 500
 
 helpers do
   def calculate_total(cards)
@@ -29,11 +30,19 @@ helpers do
 
   def loser(message)
     @show_hit_or_stay_buttons = false
+    session[:pot] = session[:pot] - session[:bet]
     @error = message
     @play_again = true
   end
 
   def winner(message)
+    @show_hit_or_stay_buttons = false
+    session[:pot] = session[:pot] + session[:bet]
+    @success = message
+    @play_again = true
+  end
+
+  def tie(message)
     @show_hit_or_stay_buttons = false
     @success = message
     @play_again = true
@@ -45,8 +54,8 @@ before do
 end
 
 get '/' do
-  if session['username']
-    redirect '/game'
+  if session[:username]
+    redirect '/bet'
   else
     erb :form
   end
@@ -57,13 +66,41 @@ post '/getname' do
     @error = "Name is required"
     halt erb(:form)
   else
-    session['username'] = params['username']
-    redirect '/'
+    session[:username] = params['username']
+    session[:pot] = INITIAL_POT_AMOUNT
+    redirect '/bet'
+  end
+end
+
+get '/bet' do
+  session[:bet] = nil
+  erb :bet
+end
+
+get '/new' do
+  session[:username] = nil
+  session[:pot] = nil
+  redirect '/'
+end
+
+post '/bet' do
+  if params[:bet].nil? || params[:bet].to_i == 0
+    @error = "Must make a bet."
+    halt erb(:bet)
+  elsif params[:bet].to_i > session[:pot]
+    @error = "You bet more than you have! ($#{session[:pot]})"
+    halt erb(:bet)
+  else
+    session[:bet] = params[:bet].to_i
+    redirect '/game'
   end
 end
 
 get '/game' do
   if session[:username]
+    unless session[:pot]
+      session[:pot] = INITIAL_POT_AMOUNT
+    end
     session[:turn] = session[:username]
     suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs']
     values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
@@ -129,7 +166,7 @@ get '/game/compare' do
     #@success = "Congratulations! #{session[:username]} wins!"
     winner("Congratulations! #{session[:username]} wins with #{player_total}!")
   else
-    winner("Game ended in a tie.")
+    tie("Game ended in a tie.")
   end
   erb :game
 end
