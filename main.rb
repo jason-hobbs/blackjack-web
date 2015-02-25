@@ -31,20 +31,20 @@ helpers do
   def loser(message)
     @show_hit_or_stay_buttons = false
     session[:pot] = session[:pot] - session[:bet]
-    @error = message
+    @loser = message
     @play_again = true
   end
 
   def winner(message)
     @show_hit_or_stay_buttons = false
     session[:pot] = session[:pot] + session[:bet]
-    @success = message
+    @winner = message
     @play_again = true
   end
 
   def tie(message)
     @show_hit_or_stay_buttons = false
-    @success = message
+    @winner = message
     @play_again = true
   end
 end
@@ -125,7 +125,7 @@ post '/game/player/hit' do
   elsif player_total > BLACKJACK_AMOUNT
     loser("#{session[:username]} busted with #{player_total}!")
   end
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/player/stay' do
@@ -148,7 +148,7 @@ get '/game/dealer' do
     @show_hit_or_stay_buttons = false
     @show_dealer_hit_button = true
   end
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/dealer/hit' do
@@ -168,7 +168,7 @@ get '/game/compare' do
   else
     tie("Game ended in a tie.")
   end
-  erb :game
+  erb :game, layout: false
 end
 
 get '/game_over' do
